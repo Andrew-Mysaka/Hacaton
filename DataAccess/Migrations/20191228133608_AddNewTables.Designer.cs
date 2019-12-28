@@ -4,62 +4,22 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20191228133608_AddNewTables")]
+    partial class AddNewTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("DataAccess.Account", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AccountHeroesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Accounts");
-                });
-
-            modelBuilder.Entity("DataAccess.AccountHeroes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HeroId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("HeroId");
-
-                    b.ToTable("AccountHeroes");
-                });
 
             modelBuilder.Entity("DataAccess.Answer", b =>
                 {
@@ -84,7 +44,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answer");
                 });
 
             modelBuilder.Entity("DataAccess.Bot", b =>
@@ -109,31 +69,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Bots");
-                });
-
-            modelBuilder.Entity("DataAccess.BotAction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Action")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BotId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HeroId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BotId");
-
-                    b.HasIndex("HeroId");
-
-                    b.ToTable("BotActions");
                 });
 
             modelBuilder.Entity("DataAccess.Course", b =>
@@ -229,29 +164,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Heroes");
                 });
 
-            modelBuilder.Entity("DataAccess.ScoreTable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("ScoreTables");
-                });
-
             modelBuilder.Entity("DataAccess.Test", b =>
                 {
                     b.Property<int>("Id")
@@ -291,48 +203,11 @@ namespace DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DataAccess.Account", b =>
-                {
-                    b.HasOne("DataAccess.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DataAccess.AccountHeroes", b =>
-                {
-                    b.HasOne("DataAccess.Account", null)
-                        .WithMany("AccountHeroes")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccess.Hero", "Hero")
-                        .WithMany()
-                        .HasForeignKey("HeroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DataAccess.Answer", b =>
                 {
                     b.HasOne("DataAccess.Test", null)
                         .WithMany("Answers")
                         .HasForeignKey("TestId");
-                });
-
-            modelBuilder.Entity("DataAccess.BotAction", b =>
-                {
-                    b.HasOne("DataAccess.Bot", "Bot")
-                        .WithMany()
-                        .HasForeignKey("BotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccess.Hero", "Hero")
-                        .WithMany()
-                        .HasForeignKey("HeroId");
                 });
 
             modelBuilder.Entity("DataAccess.CoursePart", b =>
@@ -351,15 +226,6 @@ namespace DataAccess.Migrations
                     b.HasOne("DataAccess.Test", "Test")
                         .WithMany()
                         .HasForeignKey("TestId");
-                });
-
-            modelBuilder.Entity("DataAccess.ScoreTable", b =>
-                {
-                    b.HasOne("DataAccess.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
